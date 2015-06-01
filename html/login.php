@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="application-name" content="Goals">
+    <meta name="description" content="Make meaningful changes in your life">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Goals | Log in</title>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/home/rj/Scripts/goals/html/js/validator.js"></script>
+  </head>
+
+
+  <body>
+    
+    <?php
+      require_once __DIR__ . "/../accounts.php";
+require_once __DIR__ . "/../auth.php";
+require_once __DIR__ . "/../db.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!empty($_POST["username"])) {
+        $username = test_input($_POST["username"]);
+    }
+
+    if (!empty($_POST["password"])) {
+        $password = test_input($_POST["password"]);
+    }
+    
+    $hash = getHash(getIDFromName($username));
+    if ($hash != DB_NO_USER_FOUND) {
+        if (password_verify($password, $hash)) {
+            $uid = getIDFromName($username);
+            $token = generateToken();
+            updateToken($uid, $token);
+            
+            setcookie("token", $token, time()+60*60*24);
+            
+            $URL = "auth_index.php";
+            header('Location: ' . $URL);
+        } else {
+            $badInfo = true;
+        }
+    } else {
+        $badInfo = true;
+    }
+}
+
+function test_input($data) {
+    $data = htmlspecialchars(stripslashes(trim($data)));
+    return $data;
+}
+    ?>
+
+    <!-- Body -->
+    <div class="container-fluid">
+      
+      <!-- Navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.php">Goals</a>
+          </div>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li><a href="index.php">Home</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+              <li class="active"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+      <?php
+         if ($badInfo) {
+             $error = "<div class=\"alert alert-danger alert-dismissible\" role=\"alert\"><strong>Oh no!</strong> Check your username and password and try again.</div>";
+             echo $error;
+         }
+      ?>
+
+      <div class="well">
+        <form action="login.php" method="post" role="form">
+          <div class="form-group">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Login">
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
