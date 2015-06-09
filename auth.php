@@ -5,7 +5,13 @@ require_once "db.php";
 // Common authentication functions
 
 function createHash($password) {
-    // Hash password using random salt and bcrypt with cost 15
+    /**
+     * Get hash for password using bcrypt and random salt
+     *
+     * @param string $password Password to be hashed
+     *
+     * @return string
+     */
     
     $options = [
         'cost' => 15,
@@ -17,18 +23,26 @@ function createHash($password) {
 }
 
 function getHash($uid) {
-    // Get password hash for user
+    /**
+     * Retrieve stored password hash for given user
+     *
+     * @param int $uid ID of user for hash to fetched for
+     *
+     * @return mixed[int/string]
+     */
     
-    $conn = new mysqli(SERVER_NAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
-    if ($conn->connect_error) {
-        return DB_CONNECTION_ERROR;
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return 0;
     } else {
         $fetch = $conn->prepare("SELECT hash FROM users WHERE u_id=?");
         $fetch->bind_param("i", $uid);
         
         $fetch->execute();
+
         $fetch->store_result();
         $fetch->bind_result($hash);
+
         if ($fetch->fetch()) {
             if ($fetch->num_rows == 0) {
                 return DB_NO_USER_FOUND;
@@ -36,102 +50,153 @@ function getHash($uid) {
                 return $hash; 
             }
         }
-        $fetch->free_result();
-        $fetch->close();
-        $conn->close();
     }
 }
 
 function generateToken() {
-    // Generate random 16-character token
+    /**
+     * Generate random 32-character token
+     *
+     * @return string
+     */
+
     return bin2hex(openssl_random_pseudo_bytes(16));
 }
 
 function deleteToken($uid) {
-    // Delete current token for user
+    /**
+     * Delete currently stored token for given user
+     * @param int $uid ID for user
+     *
+     * @return bool
+     */
     
-    $conn = new mysqli(SERVER_NAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
-    if ($conn->connect_error) {
-        return DB_CONNECTION_ERROR;
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return false;
     } else {
         $delete = $conn->prepare("DELETE FROM tokens WHERE u_id=?");
         $delete->bind_param("i", $uid);
         
         $delete->execute();
+
         $delete->close();
         $conn->close();
-        return DB_SUCCESS;
+
+        return true;
     }
 }
 
 function deleteTokenFromTokenVal($token) {
-    // Delete token for user based on token value
+    /**
+     * Delete all instances of given token
+     *
+     * @param string $token Token to be deleted
+     *
+     * @return bool
+     */
 
-    $conn = new mysqli(SERVER_NAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
-    if ($conn->connect_error) {
-        return DB_CONNECTION_ERROR;
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return false;
     } else {
         $delete = $conn->prepare("DELETE FROM tokens WHERE token=?");
         $delete->bind_param("s", $token);
         
         $delete->execute();
+
         $delete->close();
         $conn->close();
-        return DB_SUCCESS;
+
+        return true;
     }
 }
 
 function insertToken($uid, $token) {
-    // Insert new token for user. SHOULD NOT BE CALLED BESIDES THROUGH changeToken!
+    /**
+     * Insert new token for given user. Should not be called directly
+     *
+     * @param int $uid ID of user token is being inserted for
+     * @param string $token Token to be inserted
+     *
+     * @return bool
+     */
     
-    $conn = new mysqli(SERVER_NAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
-    if ($conn->connect_error) {
-        return DB_CONNECTION_ERROR;
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return false;
     } else {
         $insert = $conn->prepare("INSERT INTO tokens (u_id, token, time_created) VALUES (?, ?, ?)");
         $insert->bind_param("isi", $uid, $token, $time);
         
         $time = time();
         $insert->execute();
+
         $insert->close();
-        return DB_SUCCESS;
+        $conn->close();
+
+        return true;
     }
 }
 
 function updateToken($uid, $token) {
-    // Update current token for user, deleting existing one if necessary
+    /**
+     * Delete all tokens for given user and then insert a new one
+     *
+     * @param int $uid ID of user token is being inserted for
+     * @param string $token Token to be inserted
+     *
+     * @return bool
+     */
     
-    deleteToken($uid);
-    insertToken($uid, $token);
+    if (deleteToken($uid)) {
+        return insertToken($uid, $token);
+    } else {
+        return false;
+    }
 }
 
 function verifyToken($token) {
-    // Verifies that given token is stored in database
-    $conn = new mysqli(SERVER_NAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
-    if ($conn->connect_error) {
-        return DB_CONNECTION_ERROR;
+    /**
+     * Verify that given token is stored in database
+     *
+     * @param token $token Token to be verified
+     *
+     * @return bool
+     */
+
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return false;
     } else {
         $check = $conn->prepare("SELECT * FROM tokens WHERE token=?");
         $check->bind_param("s", $token);
        
         $check->execute();
         $check->store_result();
-        if ($check->num_rows == 0) {
-            return false;
-        } else {
-            return true;
-        }
-        $retrieve->free_result();
+
+        $rows = $check->num_rows;
+
+        $check->free_result();
         $check->close();
         $conn->close();
+
+        return !$rows == 0;
     }
 }
 
 function getIDFromToken($token) {
-    // Get ID of user from token
-    $conn = new mysqli(SERVER_NAME, DB_USERNAME, DB_PASSWORD, DB_NAME);
-    if ($conn->connect_error) {
-        return DB_CONNECTION_ERROR;
+    /**
+     * Get user ID associated with given token
+     *
+     * @param token Token to be used as identifier
+     *
+     * @return int
+     */
+
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return 0;
     } else {
         $fetch = $conn->prepare("SELECT u_id FROM tokens WHERE token=?");
         $fetch->bind_param("s", $token);
@@ -139,32 +204,47 @@ function getIDFromToken($token) {
         $fetch->execute();
         $fetch->store_result();
         $fetch->bind_result($uid);
-        if ($fetch->fetch()) {
+
+        while ($fetch->fetch()) {
             return $uid;
         }
-        $fetch->free_result();
-        $fetch->close();
-        $conn->close();
+    }
+}
+
+function getToken() {
+    /**
+     * Get token currently stored on client
+     *
+     * @return string
+     */
+
+    if (isset($_COOKIE["token"])) {
+        return $_COOKIE["token"];
+    } else {
+        return "";
     }
 }
 
 function getAndVerifyToken() {
-    if (isset($_COOKIE["token"])) {
-        $token = $_COOKIE["token"];
+    /**
+     * Retrieve and verify token stored on client
+     * 
+     * @return int
+     */
+
+    if ($token = getToken()) {
         if (!verifyToken($token)) {
             unset($_COOKIE["token"]);
             setcookie("token", "", time()-3600);
             
-            $URL = "index.php";
-            header('Location: ' . $URL);
-            return false;
+            redirectToPage("/");
+            return 0;
         } else {
             return getIDFromToken($token);
         }
     } else {
-        $URL = "index.php";
-        header('Location: ' . $URL);
-        return false;
+        redirectToPage("/");
+        return 0;
     }
 }
 ?>

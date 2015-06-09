@@ -7,58 +7,28 @@
     <meta name="description" content="Make meaningful changes in your life">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Goals | Home</title>
+    <?php
+     require_once __DIR__ . "/../accounts.php";
+require_once __DIR__ . "/../goals.php";
+
+if (isset($_GET["username"])) {
+    $username = testInput($_GET["username"]);
+    echo "<title>Goals | " . $username . "</title>";
+}
+       ?>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  
-    <script>
-      var xmlhttp = new XMLHttpRequest();
-
-      xmlhttp.onreadystatechange = function() {
-          if (xmlhttp.readyState == 4) {
-              var userExists = JSON.parse(xmlhttp.responseText).userExists;
-              if (userExists) {
-                  $('.form-username').removeClass("has-error");
-                  window.location.replace("/profile/" + $("#form-username").val());
-              } else {
-                  $('#form-username').val("");
-                  $('.form-username').addClass("has-error");
-              }
-          }
-      };
-
-      function submitForm() {
-          var ajaxURL = "/ajax_userExists/" + $('#form-username').val();
-          
-          xmlhttp.open("GET", ajaxURL, true);
-          xmlhttp.send();
-      }
-    </script>
-
   </head>
 
 
   <body>
-      
-<?php
-      require_once __DIR__ . "/../auth.php";
-require_once __DIR__ . "/../accounts.php";
-require_once __DIR__ . "/../goals.php";
-    
-$uid = getAndVerifyToken();
-if (!$uid) {
-    redirectToPage("/login");
-}
-
-?>
 
     <!-- Body -->
     <div class="container-fluid">
 
       <!-- Navbar -->
-
       <nav class="navbar navbar-default">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -67,54 +37,26 @@ if (!$uid) {
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Goals</a>
+            <a class="navbar-brand" href="/">Goals</a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
+              <li><a href="/auth/index/">Home</a></li>
               <li><a href="/auth/addgoal">Add goal</a></li>
             </ul>
-            <form class="navbar-form navbar-right" onsubmit="submitForm();return false;">
-              <div class="input-group form-username">
-                <span class="input-group-addon" id="basic-addon1">@</span>
-                <input type="text" class="form-control" name="username" id="form-username" placeholder="Username" aria-describedby="basic-addon1">
-              </div>
-              <button class="btn btn-default">Search</button>
-            </form>
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-inbox"></span></a>
-                <ul class="dropdown-menu list-group" role="menu">
-                    <?php
-    $ratings = getRatings($uid, MYSQLI_ASSOC);
-deleteRatings($uid);
-$ratingsHTML = "";
-
-foreach ($ratings as $row) {
-    $goalID = $row["g_id"];
-    $rater = $row["u_from"];
-    $ratingNum = $row["rating"];
-    
-    $rating = '';
-    $rating .= '<li class="list-group-item">User ' . getNameFromID($rater) . ' rated your goal "' . getGoalName($goalID) . '" ' . mapRatingToText($ratingNum) . ' (' . $ratingNum . ' point(s))</li>';
-
-    $ratingsHTML .= $rating;
-}
-
-    echo $ratingsHTML;
-                    ?>
-                </ul>
-              </li>
             </ul>
           </div>
         </div>
       </nav>
       
       <?php
+    $uid = getIDFromName($username);
+
 $rows = fetchGoals($uid, MYSQLI_ASSOC);
 
-$goals = "";
+$goals = "<h1>" . $username . "</h1>";
 foreach ($rows as $row) {
     $goalID = $row["g_id"];
     $goalName = $row["g_name"];
@@ -135,14 +77,14 @@ foreach ($rows as $row) {
     $goal .= $goalName;
     $goal .= '<span class="pull-right">';
     if ($percentage == 100) {$goal .= '<strong>Goal reached! </strong>';}
-    $goal .= '<a href="/auth/deletegoal/' . $goalID . '" class="confirmation"><span class="glyphicon glyphicon-remove"></span></a>';
+    $goal .= '<a href="/auth/rategoal/' . $goalID . '">';
+    $goal .= '<span class="glyphicon glyphicon-plus-sign"></span></a>';
     $goal .= '</span>';
     $goal .= '</div><div class="panel-body"><div class="progress"><div class="progress-bar ' . $progressType . '" role="progressbar" aria-valuenow="' . $points . '" aria-valuemin="0" aria-valuemax="' . $pointsGoal . '" style="min-width: 2em; width: ' . $percentage . '%;">';
     $goal .= $points . "/" . $pointsGoal . "</div></div></div></div>";
     
     $goals .= $goal;
 }
-
 echo $goals;
       ?>
       

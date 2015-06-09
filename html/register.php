@@ -25,29 +25,29 @@
       $username = $password = $email = "";
 
       if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (!empty($_POST["username"])) {
-          $username = test_input($_POST["username"]);
-        }
-       
-        if (!empty($_POST["password"])) {
-          $password = test_input($_POST["password"]);
-        }
-       
-        if (!empty($_POST["email"])) {
-          $email = test_input($_POST["email"]);
-        }
-        
-        createUser($username, createHash($password), $email);
-
-        $login = "login.php";
-        header('Location: ' . $login);
+          if (!empty($_POST["username"])) {
+              $username = testInput($_POST["username"]);
+          }
+          
+          if (!empty($_POST["password"])) {
+              $password = testInput($_POST["password"]);
+          }
+          
+          if (!empty($_POST["email"])) {
+              $email = testInput($_POST["email"]);
+          }
+          
+          if (!empty($_POST["emailNotifications"])) {
+              $emailNotifications = true;
+          } else {
+              $emailNotifications = false;
+          }
+                  
+          createUser($username, createHash($password), $email, $emailNotifications);
+              
+          redirectToPage("/login");
       }
-       
-      function test_input($data) {
-        $data = htmlspecialchars(stripslashes(trim($data)));
-        return $data;
-      }
-    ?> 
+       ?> 
 
     <!-- Body -->
     <div class="container-fluid">
@@ -61,22 +61,22 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php">Goals</a>
+            <a class="navbar-brand" href="/">Goals</a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-              <li><a href="index.php">Home</a></li>
+              <li><a href="/">Home</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-              <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+              <li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
             </ul>
           </div>
         </div>
       </nav>
       
       <div class="well">
-        <form action="register.php" method="post" role="form">
+        <form action="register" method="post" role="form">
           <div class="form-group">
             <input type="text" class="form-control" name="username" placeholder="Username" required>
           </div>
@@ -92,6 +92,11 @@
           </div>
           <div class="form-group">
             <input type="email" class="form-control" name="email" placeholder="Email" required>
+          </div>
+          <div class="form-group checkbox">
+            <label>
+              <input type="checkbox" name="emailNotifications"> Receive notifications when your goals are rated
+            </label>
           </div>
           <div class="form-group">
             <input type="submit" class="btn btn-success" value="Register">

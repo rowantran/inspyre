@@ -1,0 +1,19 @@
+# Enable rewrites
+RewriteEngine on
+
+# Rewrite authenticated area
+RewriteRule ^auth/(\w+)/?(\d+)?/?$ auth_$1/$2
+
+# Rewrite requests /*/ to /*.php (with manual bypassing for pages with GET variables)
+RewriteRule ^auth_deletegoal/(\d+)/?$ auth_deletegoal.php?goalID=$1
+RewriteRule ^auth_rategoal/(\d+)/?$ auth_rategoal.php?goalID=$1
+
+RewriteRule ^ajax_userExists/(\w+)/?$ ajax_userExists.php?username=$1
+
+RewriteRule ^profile/(\w+)/?$ profile.php?username=$1
+
+RewriteRule ^(\w+)/?$ $1.php
+
+# Prevent direct access to .php files
+RewriteCond %{THE_REQUEST} \.php
+RewriteRule ^\w+\.php - [F]

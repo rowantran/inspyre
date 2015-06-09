@@ -18,10 +18,10 @@
   <body>
       
 <?php
+      require_once __DIR__ . "/../db.php";
+
       if (isset($_COOKIE["token"])) {
-          $URL = "auth_index.php";
-          header('Location: ' . $URL);
-          die();
+          redirectToPage("/auth/index");
       }
 ?>
           
@@ -44,8 +44,8 @@
               <li class="active"><a href="#">Home</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-              <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+              <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+              <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
             </ul>
           </div>
         </div>

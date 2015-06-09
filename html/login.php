@@ -23,13 +23,15 @@
 require_once __DIR__ . "/../auth.php";
 require_once __DIR__ . "/../db.php";
 
+$badInfo = false;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["username"])) {
-        $username = test_input($_POST["username"]);
+        $username = testInput($_POST["username"]);
     }
 
     if (!empty($_POST["password"])) {
-        $password = test_input($_POST["password"]);
+        $password = testInput($_POST["password"]);
     }
     
     $hash = getHash(getIDFromName($username));
@@ -41,8 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             setcookie("token", $token, time()+60*60*24);
             
-            $URL = "auth_index.php";
-            header('Location: ' . $URL);
+            redirectToPage("/auth/index");
         } else {
             $badInfo = true;
         }
@@ -50,12 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $badInfo = true;
     }
 }
-
-function test_input($data) {
-    $data = htmlspecialchars(stripslashes(trim($data)));
-    return $data;
-}
-    ?>
+?>
 
     <!-- Body -->
     <div class="container-fluid">
@@ -69,14 +65,14 @@ function test_input($data) {
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php">Goals</a>
+            <a class="navbar-brand" href="/">Goals</a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-              <li><a href="index.php">Home</a></li>
+              <li><a href="/">Home</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+              <li><a href="register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
               <li class="active"><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
             </ul>
           </div>
@@ -91,7 +87,7 @@ function test_input($data) {
       ?>
 
       <div class="well">
-        <form action="login.php" method="post" role="form">
+        <form action="login" method="post" role="form">
           <div class="form-group">
             <input type="text" class="form-control" id="username" name="username" placeholder="Username">
           </div>

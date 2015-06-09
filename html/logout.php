@@ -19,9 +19,7 @@ if (isset($_COOKIE["token"])) {
     setcookie("token", "", time()-3600);
 }
  
-$home = "index.php";
-header('Location: ' . $home);
-die();
+redirectToPage("/");
    ?>
 
   </body>
