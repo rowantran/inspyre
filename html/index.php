@@ -10,12 +10,13 @@
     <title>Inspyre | Home</title>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/custom.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   </head>
 
 
-  <body>
+  <body class="splash">
       
 <?php
       require_once __DIR__ . "/../db.php";
@@ -53,9 +54,21 @@
       
       
       <div class="jumbotron">
-        <h1>Goals</h1>
-        <p>Goals helps you create meaningful change in your life. Start tracking your milestones with the help of your peers today.</p>
+        <h1>Inspyre</h1>
+        <p>Inspyre helps you create meaningful change in your life. Start tracking your goals with the help of your peers today.</p>
       </div>
+
+      <div class="col-md-6 col-md-offset-3 col-main-center">
+        <h2>Follow through</h2>
+        <p>Never fail to follow through on your goals again. Inspyre lets your friends and family rate your progress on personal goals so that you'll always have an accurate measurement of how well you're doing.</p>
+
+        <h2>Help others</h2>
+        <p>Return the favor by rating others' goals as well. Inspyre allows you to follow users to receive information on their progress on goals; just switch over to the Following tab at your dashboard to check how many goals the users you are following have completed.</p>
+
+        <h2>Make change</h2>
+        <p>With Inspyre, you can make changes in your life while helping others make changes themselves. By creating your own goals and rating others', users help create an active environment that makes goalsetting easier than ever.</p>
+      </div>
+
     </div>
     
   </body>

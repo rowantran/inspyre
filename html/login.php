@@ -89,10 +89,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <div class="well">
         <form action="login" method="post" role="form">
           <div class="form-group">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+            </div>
           </div>
           <div class="form-group">
-            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+            </div>
           </div>
           <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Login">
