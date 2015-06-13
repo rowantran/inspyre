@@ -47,3 +47,16 @@ CREATE TABLE ratings (
                REFERENCES users(u_id)
                ON DELETE CASCADE
 );
+
+CREATE TABLE following (
+       f_id INT NOT NULL AUTO_INCREMENT,
+       u_id INT NOT NULL,
+       u_following INT NOT NULL,
+       PRIMARY KEY (f_id),
+       FOREIGN KEY (u_id)
+               REFERENCES users(u_id)
+               ON DELETE CASCADE,
+       FOREIGN KEY (u_following)
+               REFERENCES users(u_id)
+               ON DELETE CASCADE
+);

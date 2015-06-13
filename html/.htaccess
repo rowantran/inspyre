@@ -10,6 +10,8 @@ RewriteRule ^auth_rategoal/(\d+)/?$ auth_rategoal.php?goalID=$1
 
 RewriteRule ^ajax_userExists/(\w+)/?$ ajax_userExists.php?username=$1
 
+RewriteRule ^profile/(\w+)/follow/?$ follow.php?username=$1
+RewriteRule ^profile/(\w+)/unfollow/?$ unfollow.php?username=$1
 RewriteRule ^profile/(\w+)/?$ profile.php?username=$1
 
 RewriteRule ^(\w+)/?$ $1.php

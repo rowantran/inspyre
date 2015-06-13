@@ -7,7 +7,7 @@
     <meta name="description" content="Make meaningful changes in your life">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Goals | Home</title>
+    <title>Inspyre | Home</title>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -48,9 +48,6 @@ require_once __DIR__ . "/../accounts.php";
 require_once __DIR__ . "/../goals.php";
     
 $uid = getAndVerifyToken();
-if (!$uid) {
-    redirectToPage("/login");
-}
 
 ?>
 
@@ -67,22 +64,27 @@ if (!$uid) {
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Goals</a>
+            <a class="navbar-brand" href="#">Inspyre</a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
               <li class="active"><a href="#">Home</a></li>
               <li><a href="/auth/addgoal">Add goal</a></li>
+              <li><a href="/auth/following">Following</a></li>
             </ul>
-            <form class="navbar-form navbar-right" onsubmit="submitForm();return false;">
-              <div class="input-group form-username">
-                <span class="input-group-addon" id="basic-addon1">@</span>
-                <input type="text" class="form-control" name="username" id="form-username" placeholder="Username" aria-describedby="basic-addon1">
-              </div>
-              <button class="btn btn-default">Search</button>
-            </form>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="dropdown-profile">
+                  <?php
+                     echo getNameFromID($uid);
+                     ?> <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu list-group" role="menu" aria-labelledby="dropdown-profile">
+                  <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-inbox"></span></a>
                 <ul class="dropdown-menu list-group" role="menu">
@@ -107,6 +109,13 @@ foreach ($ratings as $row) {
                 </ul>
               </li>
             </ul>
+            <form class="navbar-form navbar-right" onsubmit="submitForm();return false;">
+              <div class="input-group form-username">
+                <span class="input-group-addon" id="basic-addon1">@</span>
+                <input type="text" class="form-control" name="username" id="form-username" placeholder="Username" aria-describedby="basic-addon1">
+              </div>
+              <button class="btn btn-default">Search</button>
+            </form>
           </div>
         </div>
       </nav>
@@ -137,7 +146,7 @@ foreach ($rows as $row) {
     if ($percentage == 100) {$goal .= '<strong>Goal reached! </strong>';}
     $goal .= '<a href="/auth/deletegoal/' . $goalID . '" class="confirmation"><span class="glyphicon glyphicon-remove"></span></a>';
     $goal .= '</span>';
-    $goal .= '</div><div class="panel-body"><div class="progress"><div class="progress-bar ' . $progressType . '" role="progressbar" aria-valuenow="' . $points . '" aria-valuemin="0" aria-valuemax="' . $pointsGoal . '" style="min-width: 2em; width: ' . $percentage . '%;">';
+    $goal .= '</div><div class="panel-body"><div class="progress"><div class="progress-bar ' . $progressType . '" role="progressbar" aria-valuenow="' . $points . '" aria-valuemin="0" aria-valuemax="' . $pointsGoal . '" style="min-width: 5em; width: ' . $percentage . '%;">';
     $goal .= $points . "/" . $pointsGoal . "</div></div></div></div>";
     
     $goals .= $goal;

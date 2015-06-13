@@ -7,7 +7,7 @@
     <meta name="description" content="Make meaningful changes in your life">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Goals | Add goal</title>
+    <title>Inspyre | Add goal</title>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -68,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container-fluid">
 
       <!-- Navbar -->
+
       <nav class="navbar navbar-default">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -76,12 +77,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Goals</a>
+            <a class="navbar-brand" href="/">Inspyre</a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="/auth/addgoal">Add goal</a></li>
+              <li><a href="/">Home</a></li>
+              <li class="active"><a href="#">Add goal</a></li>
+              <li><a href="/auth/following">Following</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="dropdown-profile">
+                  <?php
+                     echo getNameFromID($uid);
+                     ?> <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu list-group" role="menu" aria-labelledby="dropdown-profile">
+                  <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-inbox"></span></a>
+                <ul class="dropdown-menu list-group" role="menu">
+                    <?php
+    $ratings = getRatings($uid, MYSQLI_ASSOC);
+deleteRatings($uid);
+$ratingsHTML = "";
+
+foreach ($ratings as $row) {
+    $goalID = $row["g_id"];
+    $rater = $row["u_from"];
+    $ratingNum = $row["rating"];
+    
+    $rating = '';
+    $rating .= '<li class="list-group-item">User ' . getNameFromID($rater) . ' rated your goal "' . getGoalName($goalID) . '" ' . mapRatingToText($ratingNum) . ' (' . $ratingNum . ' point(s))</li>';
+
+    $ratingsHTML .= $rating;
+}
+
+    echo $ratingsHTML;
+                    ?>
+                </ul>
+              </li>
             </ul>
             <form class="navbar-form navbar-right" onsubmit="submitForm();return false;">
               <div class="input-group form-username">
@@ -90,9 +129,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </div>
               <button class="btn btn-default">Search</button>
             </form>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
-            </ul>
           </div>
         </div>
       </nav>

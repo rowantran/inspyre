@@ -1,4 +1,5 @@
  <?php
+require_once "accounts.php";
 require_once "db.php";
 
 function createGoal($uid, $goalName, $pointsGoal) {
@@ -81,6 +82,7 @@ function rateGoal($uid, $gid, $rating) {
         
         $rate->close();
         $conn->close();
+
         return true;
     }
 }
@@ -109,7 +111,72 @@ function logGoalRate($uid, $gid, $rating) {
         $store->close();
         $conn->close();
         
+        emailNotify($gid, $uid, $uidOwner, $rating);
+
         return true;
+    }
+}
+
+function emailNotify($gid, $uid, $uidOwner, $rating) {
+    /**
+     * Notify user that their goal has been rated
+     *
+     * @param int $gid Goal being rated
+     * @param int $uid User rating goal
+     * @param int $uidOwner User being rated
+     * @param int $rating Rating being given
+     *
+     * @return bool
+     */
+
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return false;
+    } else {
+        if (receivesNotifications($uidOwner)) {
+            $to = getEmail($uidOwner);
+
+            $subject = "Rating received for goal " . getGoalName($gid);
+
+            $headers = "From: no-reply@inspyre.com\r\n";
+            $headers .= "Reply-To: no-reply@inspyre.com\r\n";
+            $headers .= "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+            
+
+            $message = "<html><body>";
+            $message .= "<h1>Rating received!</h1>";
+            $message .= "<p>Your goal, " . getGoalName($gid) . ", was rated by ";
+            $message .= getIDFromName($uid) . ". You got " . $rating . " points.</p>";
+            $message .= "</body></html";
+
+            mail($to, $subject, $message, $headers);
+        }
+    }
+}
+
+function receivesNotifications($uid) {
+    /**
+     * Check if user has opted to receive email notifications
+     *
+     * @param int $uid User to be checked
+     *
+     * @return bool
+     */
+
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return false;
+    } else {
+        $fetch = $conn->prepare("SELECT notifications FROM users WHERE u_id=?");
+        $fetch->bind_param("i", $uid);
+
+        $fetch->execute();
+        $fetch->bind_result($notifications);
+
+        while ($fetch->fetch()) {
+            return $notifications==1 ? true : false;
+        }
     }
 }
 

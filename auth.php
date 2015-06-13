@@ -234,17 +234,27 @@ function getAndVerifyToken() {
 
     if ($token = getToken()) {
         if (!verifyToken($token)) {
-            unset($_COOKIE["token"]);
-            setcookie("token", "", time()-3600);
+            deleteToken();
             
-            redirectToPage("/");
+            redirectToPage("/login");
             return 0;
         } else {
             return getIDFromToken($token);
         }
     } else {
-        redirectToPage("/");
+        redirectToPage("/login");
         return 0;
     }
+}
+
+function deleteTokenCookie() {
+    /**
+     * Delete token stored on client
+     *
+     * @return bool
+     */
+
+    unset($_COOKIE["token"]);
+    setcookie("token", "", time()-3600);
 }
 ?>

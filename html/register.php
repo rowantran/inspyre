@@ -7,7 +7,7 @@
     <meta name="description" content="Make meaningful changes in your life">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Goals | Register</title>
+    <title>Inspyre | Register</title>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -61,7 +61,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Goals</a>
+            <a class="navbar-brand" href="/">Inspyre</a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
