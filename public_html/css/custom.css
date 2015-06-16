@@ -1,5 +1,5 @@
 body.splash { 
-    background: url(img/bg.jpg) no-repeat center center fixed; 
+    background: url(../img/bg.jpg) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -7,7 +7,7 @@ body.splash {
 }
 
 body.register {
-    background: url(img/register_bg.jpg) no-repeat center center fixed; 
+    background: url(../img/register_bg.jpg) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -15,7 +15,7 @@ body.register {
 }
 
 body.login {
-    background: url(img/login_bg.jpg) no-repeat center center fixed; 
+    background: url(../img/login_bg.jpg) no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;

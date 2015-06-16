@@ -21,8 +21,8 @@
   <body class="register">
 
     <?php
-      require_once __DIR__ . "/../accounts.php";
-      require_once __DIR__ . "/../auth.php";
+      require_once __DIR__ . "/../resources/lib/accounts.php";
+      require_once __DIR__ . "/../resources/lib/auth.php";
 
       $username = $password = $email = "";
 

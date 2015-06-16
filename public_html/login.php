@@ -19,9 +19,10 @@
   <body class="login">
     
     <?php
-      require_once __DIR__ . "/../accounts.php";
-require_once __DIR__ . "/../auth.php";
-require_once __DIR__ . "/../db.php";
+      require_once __DIR__ . "/../config.php";
+require_once __DIR__ . "/../resources/lib/accounts.php";
+require_once __DIR__ . "/../resources/lib/auth.php";
+require_once __DIR__ . "/../resources/lib/db.php";
 
 $badInfo = false;
 
@@ -35,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
     $hash = getHash(getIDFromName($username));
-    if ($hash != DB_NO_USER_FOUND) {
+    if ($hash != $config["CONSTANTS"]["DB_NO_USER_FOUND"]) {
         if (password_verify($password, $hash)) {
             $uid = getIDFromName($username);
             $token = generateToken();

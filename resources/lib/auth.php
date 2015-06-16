@@ -1,8 +1,9 @@
 <?php
 
-require_once "db.php";
-
 // Common authentication functions
+
+require_once "common.php";
+require_once "db.php";
 
 function createHash($password) {
     /**

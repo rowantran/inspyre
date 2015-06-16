@@ -1,5 +1,9 @@
  <?php
+
+// Goal-related functions
+
 require_once "accounts.php";
+require_once "common.php";
 require_once "db.php";
 
 function createGoal($uid, $goalName, $pointsGoal) {

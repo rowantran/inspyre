@@ -1,11 +1,10 @@
 <?php
 
+// Common account functions
+    
+require_once "common.php";
 require_once "db.php";
 
-// Common account functions
-
-// Constants
-    
 function createUser($username, $hash, $email, $emailNotifications) {
     /**
      * Create new user in database

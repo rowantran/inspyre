@@ -17,8 +17,8 @@
 
   <body>
 <?php
-require_once __DIR__ . "/../auth.php";
-require_once __DIR__ . "/../goals.php";
+require_once __DIR__ . "/../resources/lib/auth.php";
+require_once __DIR__ . "/../resources/lib/goals.php";
 
 $uid = getAndVerifyToken();
 if (!$uid) {

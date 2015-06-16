@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <?php
-     require_once __DIR__ . "/../accounts.php";
-require_once __DIR__ . "/../auth.php";
-require_once __DIR__ . "/../goals.php";
+     require_once __DIR__ . "/../resources/lib/accounts.php";
+require_once __DIR__ . "/../resources/lib/auth.php";
+require_once __DIR__ . "/../resources/lib/goals.php";
 
 $uid = getAndVerifyToken();
 
@@ -134,7 +134,7 @@ if (followingUser($uid, $uidProfile)) {
     $followingText = "You do not follow this user";
 }
 
-$goals = '<div class="media"><div class="media-left"><img class="media-object" src="/css/img/default_profile.jpg" alt="Profile image" height="32" width="32"></div><div class="media-body"><h3 class="media-heading">' . getNameFromID($uidProfile) . '</h3>' . $followingText . '</div></div>';
+$goals = '<div class="media"><div class="media-left"><img class="media-object" src="/img/default_profile.jpg" alt="Profile image" height="32" width="32"></div><div class="media-body"><h3 class="media-heading">' . getNameFromID($uidProfile) . '</h3>' . $followingText . '</div></div>';
 
 if (followingUser($uid, $uidProfile)) {
     echo ' <a href="/profile/' . $username . '/unfollow" class="btn btn-default pull-right"><span class="glyphicon glyphicon-remove"> Unfollow</span></a>';

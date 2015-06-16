@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="application-name" content="Goals">
     <meta name="description" content="Make meaningful changes in your life">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Inspyre | Home</title>
+    <title>Inspyre | Following</title>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/custom.css">
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   
@@ -45,9 +43,9 @@
   <body>
       
 <?php
-      require_once __DIR__ . "/../auth.php";
-require_once __DIR__ . "/../accounts.php";
-require_once __DIR__ . "/../goals.php";
+require_once __DIR__ . "/../resources/lib/accounts.php";
+require_once __DIR__ . "/../resources/lib/auth.php";
+require_once __DIR__ . "/../resources/lib/goals.php";
     
 $uid = getAndVerifyToken();
 
@@ -66,13 +64,13 @@ $uid = getAndVerifyToken();
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Inspyre</a>
+            <a class="navbar-brand" href="/">Inspyre</a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
+              <li><a href="/">Home</a></li>
               <li><a href="/auth/addgoal">Add goal</a></li>
-              <li><a href="/auth/following">Following</a></li>
+              <li class="active"><a href="#">Following</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
@@ -122,45 +120,25 @@ foreach ($ratings as $row) {
         </div>
       </nav>
       
-      <?php
-$rows = fetchGoals($uid, MYSQLI_ASSOC);
-
-$goals = "";
-if (count($rows) != 0) {
-    foreach ($rows as $row) {
-        $goalID = $row["g_id"];
-        $goalName = $row["g_name"];
-        $pointsGoal = $row["points_goal"];
-        $points = $row["points_current"];
-        $percentage = ($points/$pointsGoal) * 100;
-        if ($percentage > 100) {$percentage = 100;}
-        
-        if ($percentage == 100) {
-            $panelType = "panel-success";
-            $progressType = "progress-bar-success";
-        } else {
-            $panelType = "panel-info";
-            $progressType = "";
-        }
-        
-        $goal = '<div class="panel ' . $panelType . '"><div class="panel-heading">';
-        $goal .= $goalName;
-        $goal .= '<span class="pull-right">';
-        if ($percentage == 100) {$goal .= '<strong>Goal reached! </strong>';}
-        $goal .= '<a href="/auth/deletegoal/' . $goalID . '" class="confirmation"><span class="glyphicon glyphicon-remove"></span></a>';
-        $goal .= '</span>';
-        $goal .= '</div><div class="panel-body"><div class="progress"><div class="progress-bar ' . $progressType . '" role="progressbar" aria-valuenow="' . $points . '" aria-valuemin="0" aria-valuemax="' . $pointsGoal . '" style="min-width: 5em; width: ' . $percentage . '%;">';
-        $goal .= $points . "/" . $pointsGoal . "</div></div></div></div>";
-        
-        $goals .= $goal;
+        <?php
+        $following = getFollowing($uid);
+$followingHTML = "";
+foreach($following as $uidFollowing) {
+    $userHTML = '<div class="media"><div class="media-left"><img class="media-object" src="/img/default_profile.jpg" alt="Profile image" height="32" width="32"></div><div class="media-body"><a href="/profile/' . getNameFromID($uidFollowing) . '"><h3 class="media-heading">' . getNameFromID($uidFollowing) . "</h3></a>You follow this user</div></div><hr>";
+    $goalsComplete = 0;
+    $goalsTotal = 0;
+    foreach(fetchGoals($uidFollowing, MYSQLI_ASSOC) as $row) {
+        $goalsTotal += 1;
+        if ($row["points_current"] >= $row["points_goal"]) {$goalsComplete += 1;}
     }
-} else {
-    $goals = '<div class="text-center">You have no goals! <a href="/auth/addgoal/">Create one?</a></div>';
+    $percentage = ($goalsComplete/$goalsTotal) * 100;
+    $userHTML .= '<div class="panel panel-info"><div class="panel-heading">Goals completed</div><div class="panel-body"><div class="progress"><div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="' . $goalsComplete . '" aria-valuemin="0" aria-valuemax="' . $goalsTotal . '" style="min-width: 5em; width: ' . $percentage . '%;">';
+    $userHTML .= $goalsComplete . "/" . $goalsTotal . "</div></div></div></div>";
+    $followingHTML .= $userHTML;
 }
+echo $followingHTML;
+        ?>
 
-echo $goals;
-      ?>
-      
     </div>
 
   </body>

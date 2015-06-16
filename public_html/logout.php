@@ -10,7 +10,7 @@
   <body>
       
 <?php
-     include __DIR__ . "/../auth.php";
+     include __DIR__ . "/../resources/lib/auth.php";
 
 if (isset($_COOKIE["token"])) {
     deleteTokenFromTokenVal($_COOKIE["token"]);
