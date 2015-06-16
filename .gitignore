@@ -1,4 +1,9 @@
+# Password files
 *.pwd
-*~
 
-.idea/
+# Emacs autosaves and backups
+*~
+#*
+
+# Page backgrounds
+html/css/img/*

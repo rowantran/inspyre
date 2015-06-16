@@ -18,7 +18,7 @@
   </head>
 
 
-  <body>
+  <body class="register">
 
     <?php
       require_once __DIR__ . "/../accounts.php";
@@ -77,7 +77,7 @@
         </div>
       </nav>
       
-      <div class="well">
+      <div class="col-md-6 col-md-offset-3 register-form">
         <form action="register" method="post" role="form">
           <div class="form-group">
             <div class="input-group">
@@ -114,6 +114,5 @@
           </div>
         </form>
       </div>
-    </div>
   </body>
 </html>

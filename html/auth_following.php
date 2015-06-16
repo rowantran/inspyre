@@ -124,7 +124,7 @@ foreach ($ratings as $row) {
         $following = getFollowing($uid);
 $followingHTML = "";
 foreach($following as $uidFollowing) {
-    $userHTML = "<h1>" . getNameFromID($uidFollowing) . "</h1><hr>";
+    $userHTML = '<div class="media"><div class="media-left"><img class="media-object" src="/css/img/default_profile.jpg" alt="Profile image" height="32" width="32"></div><div class="media-body"><a href="/profile/' . getNameFromID($uidFollowing) . '"><h3 class="media-heading">' . getNameFromID($uidFollowing) . "</h3></a>You follow this user</div></div><hr>";
     $goalsComplete = 0;
     $goalsTotal = 0;
     foreach(fetchGoals($uidFollowing, MYSQLI_ASSOC) as $row) {

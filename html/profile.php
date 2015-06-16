@@ -70,7 +70,7 @@ if (isset($_GET["username"])) {
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
+              <li><a href="/">Home</a></li>
               <li><a href="/auth/addgoal">Add goal</a></li>
           <li><a href="/auth/following">Following</a></li>
             </ul>
@@ -128,7 +128,13 @@ foreach ($ratings as $row) {
 
 $rows = fetchGoals($uidProfile, MYSQLI_ASSOC);
 
-$goals = "<h1>" . $username . "</h1>";
+if (followingUser($uid, $uidProfile)) {
+    $followingText = "You follow this user";
+} else {
+    $followingText = "You do not follow this user";
+}
+
+$goals = '<div class="media"><div class="media-left"><img class="media-object" src="/css/img/default_profile.jpg" alt="Profile image" height="32" width="32"></div><div class="media-body"><h3 class="media-heading">' . getNameFromID($uidProfile) . '</h3>' . $followingText . '</div></div>';
 
 if (followingUser($uid, $uidProfile)) {
     echo ' <a href="/profile/' . $username . '/unfollow" class="btn btn-default pull-right"><span class="glyphicon glyphicon-remove"> Unfollow</span></a>';

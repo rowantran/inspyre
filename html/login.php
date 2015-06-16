@@ -10,13 +10,13 @@
     <title>Inspyre | Log in</title>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/custom.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="/home/rj/Scripts/goals/html/js/validator.js"></script>
   </head>
 
 
-  <body>
+  <body class="login">
     
     <?php
       require_once __DIR__ . "/../accounts.php";
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          }
       ?>
 
-      <div class="well">
+      <div class="col-md-6 col-md-offset-3 login-form">
         <form action="login" method="post" role="form">
           <div class="form-group">
             <div class="input-group">

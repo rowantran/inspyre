@@ -6,22 +6,41 @@ body.splash {
     background-size: cover;
 }
 
-.register {
-    background: -webkit-linear-gradient(#74b0d3, #4b91ba);
-    background: -o-linear-gradient(#74b0d3, #4b91ba);
-    background: -moz-linear-gradient(#74b0d3, #4b91ba);
-    background: linear-gradient(#74b0d3, #4b91ba);
-    background-repeat:no-repeat;
-    height: 100%;
-    min-height: 100%;
+body.register {
+    background: url(img/register_bg.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+body.login {
+    background: url(img/login_bg.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .jumbotron {
     background-color: rgba(255,255,255,0.6);
 }
 
+.register-form {
+    padding:30px;
+    border-radius:12px;
+    background-color: rgba(255,255,255,0.6);
+}
+
+.login-form {
+    padding:30px;
+    border-radius:12px;
+    background-color:rgba(255,255,255,0.6);
+}
+
 .col-main-center {
-    background-color: rgba(255,255,255,0.5);
+    background-color:rgba(255,255,255,0.6);
     border-radius: 12px;
+    padding: 20px;
     height: 100%;
 }

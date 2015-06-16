@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8">
     <meta name="application-name" content="Goals">
@@ -10,6 +10,8 @@
     <title>Inspyre | Home</title>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/custom.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   
@@ -124,32 +126,36 @@ foreach ($ratings as $row) {
 $rows = fetchGoals($uid, MYSQLI_ASSOC);
 
 $goals = "";
-foreach ($rows as $row) {
-    $goalID = $row["g_id"];
-    $goalName = $row["g_name"];
-    $pointsGoal = $row["points_goal"];
-    $points = $row["points_current"];
-    $percentage = ($points/$pointsGoal) * 100;
-    if ($percentage > 100) {$percentage = 100;}
-
-    if ($percentage == 100) {
-        $panelType = "panel-success";
-        $progressType = "progress-bar-success";
-    } else {
-        $panelType = "panel-info";
-        $progressType = "";
+if (count($rows) != 0) {
+    foreach ($rows as $row) {
+        $goalID = $row["g_id"];
+        $goalName = $row["g_name"];
+        $pointsGoal = $row["points_goal"];
+        $points = $row["points_current"];
+        $percentage = ($points/$pointsGoal) * 100;
+        if ($percentage > 100) {$percentage = 100;}
+        
+        if ($percentage == 100) {
+            $panelType = "panel-success";
+            $progressType = "progress-bar-success";
+        } else {
+            $panelType = "panel-info";
+            $progressType = "";
+        }
+        
+        $goal = '<div class="panel ' . $panelType . '"><div class="panel-heading">';
+        $goal .= $goalName;
+        $goal .= '<span class="pull-right">';
+        if ($percentage == 100) {$goal .= '<strong>Goal reached! </strong>';}
+        $goal .= '<a href="/auth/deletegoal/' . $goalID . '" class="confirmation"><span class="glyphicon glyphicon-remove"></span></a>';
+        $goal .= '</span>';
+        $goal .= '</div><div class="panel-body"><div class="progress"><div class="progress-bar ' . $progressType . '" role="progressbar" aria-valuenow="' . $points . '" aria-valuemin="0" aria-valuemax="' . $pointsGoal . '" style="min-width: 5em; width: ' . $percentage . '%;">';
+        $goal .= $points . "/" . $pointsGoal . "</div></div></div></div>";
+        
+        $goals .= $goal;
     }
-    
-    $goal = '<div class="panel ' . $panelType . '"><div class="panel-heading">';
-    $goal .= $goalName;
-    $goal .= '<span class="pull-right">';
-    if ($percentage == 100) {$goal .= '<strong>Goal reached! </strong>';}
-    $goal .= '<a href="/auth/deletegoal/' . $goalID . '" class="confirmation"><span class="glyphicon glyphicon-remove"></span></a>';
-    $goal .= '</span>';
-    $goal .= '</div><div class="panel-body"><div class="progress"><div class="progress-bar ' . $progressType . '" role="progressbar" aria-valuenow="' . $points . '" aria-valuemin="0" aria-valuemax="' . $pointsGoal . '" style="min-width: 5em; width: ' . $percentage . '%;">';
-    $goal .= $points . "/" . $pointsGoal . "</div></div></div></div>";
-    
-    $goals .= $goal;
+} else {
+    $goals = '<div class="text-center">You have no goals! <a href="/auth/addgoal/">Create one?</a></div>';
 }
 
 echo $goals;
