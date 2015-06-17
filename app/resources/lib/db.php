@@ -2,8 +2,8 @@
 
 // Lowest-level database-related functions
 
-require_once __DIR__ . "/../../config.php";
 require_once "common.php";
+require_once __DIR__ . "/../../config.php";
 
 $dbServerName = $config["dbCredentials"]["SERVER_NAME"];
 $dbUsername = $config["dbCredentials"]["USERNAME"];
