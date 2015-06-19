@@ -55,7 +55,7 @@
       
       <div class="jumbotron">
         <h1>Inspyre</h1>
-        <p>Inspyre helps you create meaningful change in your life. Start tracking your goals with the help of your peers today.</p>
+        <p>Inspyre helps you create meaningful change in your life. Start tracking your progress on your goals with the help of your peers today.</p>
       </div>
 
       <div class="col-md-6 col-md-offset-3 col-main-center">
