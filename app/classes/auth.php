@@ -29,7 +29,7 @@ function getHash($uid) {
      *
      * @param int $uid ID of user for hash to fetched for
      *
-     * @return mixed[int/string]
+     * @return mixed[bool/string]
      */
     
     $conn = createDatabaseConnection();

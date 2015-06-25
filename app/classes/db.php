@@ -27,4 +27,20 @@ function createDatabaseConnection() {
     }
 }
 
+function executeDatabaseFunction($callback) {
+    /**
+     * Create database connection and execute callback if successful
+     *
+     * @param callable $callback Function to be called
+     *
+     * @return bool
+     */
+
+    $conn = createDatabaseConnection();
+    if (!$conn) {
+        return false;
+    } else {
+        return call_user_func($callback, $conn);
+    }
+}
 ?>
