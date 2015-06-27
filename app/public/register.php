@@ -10,7 +10,7 @@
     <title>Inspyre | Register</title>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="../css/custom.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -20,62 +20,13 @@
 
   <body class="register">
 
-    <?php
-      require_once __DIR__ . "/../resources/lib/accounts.php";
-      require_once __DIR__ . "/../resources/lib/auth.php";
-
-      $username = $password = $email = "";
-
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
-          if (!empty($_POST["username"])) {
-              $username = testInput($_POST["username"]);
-          }
-          
-          if (!empty($_POST["password"])) {
-              $password = testInput($_POST["password"]);
-          }
-          
-          if (!empty($_POST["email"])) {
-              $email = testInput($_POST["email"]);
-          }
-          
-          if (!empty($_POST["emailNotifications"])) {
-              $emailNotifications = true;
-          } else {
-              $emailNotifications = false;
-          }
-                  
-          createUser($username, createHash($password), $email, $emailNotifications);
-              
-          redirectToPage("/login");
-      }
-       ?> 
-
     <!-- Body -->
     <div class="container-fluid">
 
-      <!-- Navbar -->
-      <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Inspyre</a>
-          </div>
-          <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-              <li><a href="/">Home</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="#"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-              <li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+<?php
+                                     require_once __DIR__ . "/../classes/MainNavbar.php";
+echo (new MainNavbar)->renderHTML();
+?>
       
       <div class="col-md-6 col-md-offset-3 register-form">
         <form action="register" method="post" role="form">
