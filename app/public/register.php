@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+z<!DOCTYPE html>
 
 <html lang="en">
   <head>
@@ -24,8 +24,13 @@
     <div class="container-fluid">
 
 <?php
-                                     require_once __DIR__ . "/../classes/MainNavbar.php";
+
+    require_once __DIR__ . "/../classes/MainNavbar.php";
+require_once __DIR__ . "/../classes/Form.php";
+
 echo (new MainNavbar)->renderHTML();
+
+$form = new Form;
 ?>
       
       <div class="col-md-6 col-md-offset-3 register-form">
